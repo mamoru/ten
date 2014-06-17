@@ -3,6 +3,7 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
 
 /**
@@ -17,7 +18,7 @@ public class Board extends Observable {
 	private Random rand = new Random();
 
 	private int[][] board;
-	private int score;
+	private Score score;
 
 	private static final int EAST = 0;
 	private static final int SOUTH = 1;
@@ -33,7 +34,7 @@ public class Board extends Observable {
 	public Board(int size) {
 		size = Math.max(2, size);
 		board = new int[size][size];
-		score = 0;
+		score = new Score();
 	}
 
 	/**
@@ -51,9 +52,9 @@ public class Board extends Observable {
 	 * @return score highestValue * 10 + secondHighestValue with maximum of 100
 	 */
 	public int getScore() {
-		return score;
+		return score.get();
 	}
-
+	
 	/**
 	 * Get values on the board
 	 * 
@@ -241,39 +242,17 @@ public class Board extends Observable {
 	}
 
 	/**
-	 * Update score with highest and second highest values on TEN! board to
-	 * maximum of 10.0
-	 */
-	private void updateScore() {
-		int highest = 0;
-		int secondHighest = 0;
-		for (int row = 0; row < board.length; row++) {
-			for (int col = 0; col < board[row].length; col++) {
-				if (highest < board[row][col]) {
-					secondHighest = highest;
-					highest = board[row][col];
-				} else if (secondHighest < board[row][col]) {
-					secondHighest = board[row][col];
-				}
-			}
-		}
-
-		// No need to check secondHeighest, because only 2 merges per line are
-		// allowed. Maximum score is 10.0
-		if (highest > 9) {
-			secondHighest = 0;
-		}
-
-		score = highest * 10 + secondHighest;
-	}
-
-	/**
 	 * On change, update score and notify observers of board values and score
 	 */
 	private void handleChange() {
-		updateScore();
+		score.update(board);
 
 		this.setChanged();
-		this.notifyObservers(new Object[] { board, score });
+		this.notifyObservers(board);
+	}
+
+	public void addScoreObserver(Object observer) {
+		score.addObserver((Observer) observer);
+		
 	}
 }

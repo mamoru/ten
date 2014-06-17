@@ -8,7 +8,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.text.DecimalFormat;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -34,8 +33,6 @@ import javax.swing.SwingConstants;
  */
 public class View implements Observer {
 
-	private DecimalFormat scoreFormat = new DecimalFormat("#0.0");;
-
 	private JFrame frame;
 	private JPanel boardView;
 	private JPanel controlPanel;
@@ -44,7 +41,7 @@ public class View implements Observer {
 	private JPanel controlRight;
 
 	private JLabel[][] tiles;
-	private JLabel labelScore;
+	private ScoreView scoreView;
 
 	// Input components
 	private JMenuItem menuItemLoad;
@@ -106,8 +103,7 @@ public class View implements Observer {
 		controlRight.setLayout(new BoxLayout(controlRight, BoxLayout.Y_AXIS));
 		controlRight.setOpaque(false);
 
-		labelScore = new JLabel();
-		labelScore.setHorizontalAlignment(SwingConstants.CENTER);
+		scoreView = new ScoreView();
 
 		buttons[EAST] = new JButton("EAST");
 		buttons[SOUTH] = new JButton("SOUTH");
@@ -116,7 +112,7 @@ public class View implements Observer {
 
 		controlLeft.add(buttons[WEST]);
 		controlCenter.add(buttons[NORTH], BorderLayout.NORTH);
-		controlCenter.add(labelScore, BorderLayout.CENTER);
+		controlCenter.add(scoreView, BorderLayout.CENTER);
 		controlCenter.add(buttons[SOUTH], BorderLayout.SOUTH);
 		controlRight.add(buttons[EAST]);
 
@@ -171,9 +167,8 @@ public class View implements Observer {
 	 *            highestValue * 10 + secondHighestValue with maximum of 100
 	 */
 	public void displayGameOver(int score) {
-		String strScore = scoreFormat.format((double) score / 10);
 		JOptionPane.showMessageDialog(null,
-				"No more moves. Your final score is: " + strScore,
+				"No more moves. Your final score is: " + scoreView,
 				"Game Over!", JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -206,15 +201,14 @@ public class View implements Observer {
 	public JMenuItem getMenuItemStore() {
 		return menuItemStore;
 	}
+	
+	public Object getScoreView() {
+		return scoreView;
+	}
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		// (I think this is an) ugly way to get board AND score without need to
-		// know Controller or Model class. Also prevents the need to calculate
-		// score in View
-		Object[] args = (Object[]) arg1;
-		int[][] board = (int[][]) args[0];
-		int score = (int) args[1];
+		int[][] board = (int[][]) arg1;
 
 		// Update board
 		for (int row = 0; row < board.length; row++) {
@@ -227,8 +221,5 @@ public class View implements Observer {
 				}
 			}
 		}
-
-		// Update score
-		labelScore.setText(scoreFormat.format((double) score / 10));
 	}
 }

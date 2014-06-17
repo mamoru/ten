@@ -20,6 +20,7 @@ import views.View;
 public class AppController {
 
 	private Board board;
+	
 	private View view;
 
 	private boolean[] noMoreMoves;
@@ -52,6 +53,7 @@ public class AppController {
 
 		// When Model is updated, update View too
 		board.addObserver(view);
+		board.addScoreObserver(view.getScoreView());
 
 		// Link View Actions to Model
 		handleActions();
