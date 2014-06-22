@@ -26,10 +26,10 @@ public class Board extends Observable {
 	 * Constructor for Board: Create board with custom dimensions
 	 * 
 	 * @param size
-	 *            Length of one side of the board (at least 2)
+	 *            Length of one side of the board (at least 4)
 	 */
 	public Board(int size) {
-		size = Math.max(2, size);
+		size = Math.max(4, size);
 		board = new int[size][size];
 		score = new Score();
 	}
