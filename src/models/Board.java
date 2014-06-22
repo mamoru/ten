@@ -6,6 +6,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
 
+import utilities.Direction;
+
 /**
  * Model class: Board, a matrix of numbers that can be manipulated according to
  * the rules of TEN! Doesn't know about the Controller or the View
@@ -19,11 +21,6 @@ public class Board extends Observable {
 
 	private int[][] board;
 	private Score score;
-
-	private static final int EAST = 0;
-	private static final int SOUTH = 1;
-	private static final int WEST = 2;
-	private static final int NORTH = 3;
 
 	/**
 	 * Constructor for Board: Create board with custom dimensions
@@ -54,7 +51,7 @@ public class Board extends Observable {
 	public int getScore() {
 		return score.get();
 	}
-	
+
 	/**
 	 * Get values on the board
 	 * 
@@ -110,22 +107,30 @@ public class Board extends Observable {
 	 *            Which way to move the values on the TEN! board
 	 * @return Whether the board has been changed
 	 */
-	public boolean move(int direction) {
+	public boolean move(Direction direction) {
 		boolean hasChanged = false;
-		if (direction == EAST) {
+		
+		switch (direction) {
+		case EAST:
 			hasChanged = move();
-		} else if (direction == WEST) {
+			break;
+		case WEST:
 			mirror();
 			hasChanged = move();
 			mirror();
-		} else if (direction == SOUTH) {
+			break;
+		case SOUTH:
 			rotateCounterClockwise();
 			hasChanged = move();
 			rotateClockwise();
-		} else if (direction == NORTH) {
+			break;
+		case NORTH:
 			rotateClockwise();
 			hasChanged = move();
 			rotateCounterClockwise();
+			break;
+		default:
+			break;
 		}
 
 		if (hasChanged) {
@@ -253,6 +258,6 @@ public class Board extends Observable {
 
 	public void addScoreObserver(Object observer) {
 		score.addObserver((Observer) observer);
-		
+
 	}
 }

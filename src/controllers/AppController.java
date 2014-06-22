@@ -5,9 +5,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JButton;
-
 import models.Board;
+import utilities.Direction;
 import utilities.FileHandler;
 import views.View;
 
@@ -21,16 +20,8 @@ import views.View;
 public class AppController {
 
 	private Board board;
-	
+
 	private View view;
-
-	private boolean[] noMoreMoves;
-
-	// CONSTANTS: direction
-	private static final int EAST = 0;
-	private static final int SOUTH = 1;
-	private static final int WEST = 2;
-	private static final int NORTH = 3;
 
 	/**
 	 * Constructor for AppController. Creates default 4x4 board game of TEN!
@@ -46,8 +37,6 @@ public class AppController {
 	 *            Length of one side of the board
 	 */
 	public AppController(int size) {
-		noMoreMoves = new boolean[4];
-
 		board = new Board(size);
 		// Board(int) handles parameter validation, thus view gets correct size
 		view = new View(board.getLength());
@@ -70,7 +59,6 @@ public class AppController {
 	 * Create the Action links between view and model
 	 */
 	private void handleActions() {
-		final JButton[] buttons = view.getButtons();
 
 		// KEYS
 		// Press the respective direction button
@@ -78,21 +66,19 @@ public class AppController {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_LEFT)
-					buttons[WEST].doClick();
+					Direction.WEST.button().doClick();
 				else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
-					buttons[EAST].doClick();
+					Direction.EAST.button().doClick();
 				else if (e.getKeyCode() == KeyEvent.VK_UP)
-					buttons[NORTH].doClick();
+					Direction.NORTH.button().doClick();
 				else if (e.getKeyCode() == KeyEvent.VK_DOWN)
-					buttons[SOUTH].doClick();
+					Direction.SOUTH.button().doClick();
 			}
 		};
 
 		// BUTTONS
-		for (int b = 0; b < 4; b++) {
-			final int direction = b;
-
-			buttons[direction].addActionListener(new ActionListener() {
+		for (final Direction direction : Direction.values()) {
+			direction.button().addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent actionEvent) {
 					move(direction);
@@ -100,7 +86,7 @@ public class AppController {
 			});
 
 			// Buttons will have focus and should listen for key presses
-			buttons[direction].addKeyListener(keyHandler);
+			direction.button().addKeyListener(keyHandler);
 		}
 
 		// MENU
@@ -108,7 +94,7 @@ public class AppController {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				board.set(FileHandler.boardLoadFromFile());
-				resetNoMoreMoves();
+				resetButtons();
 			}
 		});
 		view.getMenuItemStore().addActionListener(new ActionListener() {
@@ -126,20 +112,19 @@ public class AppController {
 	 * @param direction
 	 *            Which way to move the values on the TEN! board
 	 */
-	private void move(int direction) {
+	private void move(Direction direction) {
 		// Skip if already known that this direction has no more moves
-		if (noMoreMoves[direction]) {
+		if (!direction.button().isEnabled()) {
 			return;
 		}
 
 		if (board.move(direction)) {
 			// Board changed, resetNoMoreMoves (and buttons), check if game won
-			resetNoMoreMoves();
+			resetButtons();
 			gameWon();
 		} else {
 			// Board has not changed, disable button, check if game over
-			noMoreMoves[direction] = true;
-			view.getButtons()[direction].setEnabled(false);
+			direction.button().setEnabled(false);
 			gameOver();
 		}
 	}
@@ -148,13 +133,13 @@ public class AppController {
 	 * Checks change after moving in all directions and if none invoke game over
 	 */
 	private void gameOver() {
-		for (int direction = 0; direction < 4; direction++) {
-			if (!noMoreMoves[direction]) {
+		for (Direction direction : Direction.values()) {
+			if (direction.button().isEnabled()) {
 				return;
 			}
 		}
 		view.displayGameOver(board.getScore());
-		reset();
+		resetBoard();
 	}
 
 	/**
@@ -163,27 +148,24 @@ public class AppController {
 	private void gameWon() {
 		if (board.getScore() > 99) {
 			view.displayGameWon();
-			reset();
+			resetBoard();
 		}
 	}
 
 	/**
-	 * Resets noMoreMoves list and buttons
+	 * Resets buttons for very direction
 	 */
-	private void resetNoMoreMoves() {
-		noMoreMoves = new boolean[4];
-
-		JButton[] buttons = view.getButtons();
-		for (int direction = 0; direction < 4; direction++) {
-			buttons[direction].setEnabled(true);
+	private void resetButtons() {
+		for (Direction direction : Direction.values()) {
+			direction.button().setEnabled(true);
 		}
 	}
 
 	/**
 	 * Resets and starts new game
 	 */
-	private void reset() {
-		resetNoMoreMoves();
+	private void resetBoard() {
+		resetButtons();
 		board.reset();
 	}
 

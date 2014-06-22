@@ -24,6 +24,8 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 
+import utilities.Direction;
+
 /**
  * View class: The Graphical User Interface. Doesn't know about the controller
  * or the model.
@@ -46,12 +48,6 @@ public class View implements Observer {
 	// Input components
 	private JMenuItem menuItemLoad;
 	private JMenuItem menuItemStore;
-	private JButton[] buttons = new JButton[4];
-
-	private static final int EAST = 0;
-	private static final int SOUTH = 1;
-	private static final int WEST = 2;
-	private static final int NORTH = 3;
 
 	/**
 	 * Constructor for View. Creates the Graphical User Interface
@@ -104,17 +100,18 @@ public class View implements Observer {
 		controlRight.setOpaque(false);
 
 		scoreView = new ScoreView();
+		
+		for (Direction direction : Direction.values()) {
+			direction.button(new JButton(direction.toString()));
+		}
 
-		buttons[EAST] = new JButton("EAST");
-		buttons[SOUTH] = new JButton("SOUTH");
-		buttons[WEST] = new JButton("WEST");
-		buttons[NORTH] = new JButton("NORTH");
-
-		controlLeft.add(buttons[WEST]);
-		controlCenter.add(buttons[NORTH], BorderLayout.NORTH);
+		controlLeft.add(Direction.WEST.button());
+		controlCenter.add(Direction.NORTH.button(),
+				BorderLayout.NORTH);
 		controlCenter.add(scoreView, BorderLayout.CENTER);
-		controlCenter.add(buttons[SOUTH], BorderLayout.SOUTH);
-		controlRight.add(buttons[EAST]);
+		controlCenter.add(Direction.SOUTH.button(),
+				BorderLayout.SOUTH);
+		controlRight.add(Direction.EAST.button());
 
 		controlPanel.add(controlLeft);
 		controlPanel.add(controlCenter);
@@ -182,13 +179,6 @@ public class View implements Observer {
 	}
 
 	/**
-	 * @return JButton[] directional buttons
-	 */
-	public JButton[] getButtons() {
-		return buttons;
-	}
-
-	/**
 	 * @return JMenuItem Load
 	 */
 	public JMenuItem getMenuItemLoad() {
@@ -201,7 +191,7 @@ public class View implements Observer {
 	public JMenuItem getMenuItemStore() {
 		return menuItemStore;
 	}
-	
+
 	public Object getScoreView() {
 		return scoreView;
 	}
