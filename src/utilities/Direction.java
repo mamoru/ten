@@ -7,15 +7,15 @@ import javax.swing.JButton;
  */
 public enum Direction {
 	EAST, SOUTH, WEST, NORTH;
-	
+
 	private JButton button;
-	
-	public JButton  button() {
+
+	public JButton button() {
 		return button;
 	}
-	
+
 	public void button(JButton btn) {
 		button = btn;
 	}
-	
+
 }

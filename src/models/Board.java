@@ -109,7 +109,7 @@ public class Board extends Observable {
 	 */
 	public boolean move(Direction direction) {
 		boolean hasChanged = false;
-		
+
 		switch (direction) {
 		case EAST:
 			hasChanged = move();

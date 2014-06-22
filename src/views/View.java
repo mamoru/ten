@@ -100,17 +100,15 @@ public class View implements Observer {
 		controlRight.setOpaque(false);
 
 		scoreView = new ScoreView();
-		
+
 		for (Direction direction : Direction.values()) {
 			direction.button(new JButton(direction.toString()));
 		}
 
 		controlLeft.add(Direction.WEST.button());
-		controlCenter.add(Direction.NORTH.button(),
-				BorderLayout.NORTH);
+		controlCenter.add(Direction.NORTH.button(), BorderLayout.NORTH);
 		controlCenter.add(scoreView, BorderLayout.CENTER);
-		controlCenter.add(Direction.SOUTH.button(),
-				BorderLayout.SOUTH);
+		controlCenter.add(Direction.SOUTH.button(), BorderLayout.SOUTH);
 		controlRight.add(Direction.EAST.button());
 
 		controlPanel.add(controlLeft);
