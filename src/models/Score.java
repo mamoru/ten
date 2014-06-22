@@ -6,7 +6,7 @@ import java.util.Observable;
  * Model class: Score, belongs to Board
  * 
  * @author <a href="mailto:mamoru@edwinmiltenburg.nl">Edwin Miltenburg</a>
- *
+ * 
  */
 public class Score extends Observable {
 
@@ -17,7 +17,7 @@ public class Score extends Observable {
 	 */
 	public Score() {
 		score = 0;
-		
+
 		handleChange();
 	}
 
@@ -27,7 +27,7 @@ public class Score extends Observable {
 	public int get() {
 		return score;
 	}
-	
+
 	/**
 	 * Update score with highest and second highest values on TEN! board to
 	 * maximum of 10.0
@@ -53,15 +53,15 @@ public class Score extends Observable {
 		}
 
 		score = highest * 10 + secondHighest;
-		
+
 		handleChange();
 	}
-	
+
 	/**
 	 * On change, update score and notify observers of new score
 	 */
 	private void handleChange() {
 		this.setChanged();
-		this.notifyObservers(score);
+		this.notifyObservers((double) score / 10);
 	}
 }

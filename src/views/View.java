@@ -43,11 +43,13 @@ public class View implements Observer {
 	private JPanel controlRight;
 
 	private JLabel[][] tiles;
-	private ScoreView scoreView;
 
 	// Input components
 	private JMenuItem menuItemLoad;
 	private JMenuItem menuItemStore;
+
+	// Observers
+	private ScoreLabel scoreLabel;
 
 	/**
 	 * Constructor for View. Creates the Graphical User Interface
@@ -99,7 +101,7 @@ public class View implements Observer {
 		controlRight.setLayout(new BoxLayout(controlRight, BoxLayout.Y_AXIS));
 		controlRight.setOpaque(false);
 
-		scoreView = new ScoreView();
+		scoreLabel = new ScoreLabel();
 
 		for (Direction direction : Direction.values()) {
 			direction.button(new JButton(direction.toString()));
@@ -107,7 +109,7 @@ public class View implements Observer {
 
 		controlLeft.add(Direction.WEST.button());
 		controlCenter.add(Direction.NORTH.button(), BorderLayout.NORTH);
-		controlCenter.add(scoreView, BorderLayout.CENTER);
+		controlCenter.add(scoreLabel, BorderLayout.CENTER);
 		controlCenter.add(Direction.SOUTH.button(), BorderLayout.SOUTH);
 		controlRight.add(Direction.EAST.button());
 
@@ -163,7 +165,7 @@ public class View implements Observer {
 	 */
 	public void displayGameOver(int score) {
 		JOptionPane.showMessageDialog(null,
-				"No more moves. Your final score is: " + scoreView,
+				"No more moves. Your final score is: " + scoreLabel,
 				"Game Over!", JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -191,10 +193,10 @@ public class View implements Observer {
 	}
 
 	/**
-	 * @return ScoreView
+	 * @return ScoreLabel
 	 */
 	public Object getScoreView() {
-		return scoreView;
+		return scoreLabel;
 	}
 
 	@Override
