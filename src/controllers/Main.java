@@ -7,7 +7,7 @@ import javax.swing.UIManager;
 
 /**
  * @author <a href="mailto:mamoru@edwinmiltenburg.nl">Edwin Miltenburg</a>
- * @version 2014-06-17 23:59
+ * @version 2014-06-22 13:51
  * 
  */
 public class Main {

@@ -14,6 +14,10 @@ import javax.swing.JFileChooser;
  * File handling methods for the game TEN!
  */
 public abstract class FileHandler {
+
+	// fileChooser as field to remember location
+	private static JFileChooser fileChooser = new JFileChooser();
+	
 	/**
 	 * Save TEN! board to file using JFileChooser
 	 * 
@@ -37,7 +41,6 @@ public abstract class FileHandler {
 		}
 
 		// Open Save dialog to select a target file
-		JFileChooser fileChooser = new JFileChooser();
 		int result = fileChooser.showSaveDialog(fileChooser);
 
 		// Continue only when a file target is approved
@@ -70,7 +73,6 @@ public abstract class FileHandler {
 		int[][] board = null;
 
 		// Open Save dialog to select a target file
-		JFileChooser fileChooser = new JFileChooser();
 		int result = fileChooser.showOpenDialog(fileChooser);
 
 		// Continue only when a file target is approved
