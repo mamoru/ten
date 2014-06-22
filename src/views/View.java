@@ -190,6 +190,9 @@ public class View implements Observer {
 		return menuItemStore;
 	}
 
+	/**
+	 * @return ScoreView
+	 */
 	public Object getScoreView() {
 		return scoreView;
 	}

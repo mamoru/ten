@@ -119,7 +119,7 @@ public class AppController {
 		}
 
 		if (board.move(direction)) {
-			// Board changed, resetNoMoreMoves (and buttons), check if game won
+			// Board changed, reset buttons, check if game won
 			resetButtons();
 			gameWon();
 		} else {
@@ -130,7 +130,7 @@ public class AppController {
 	}
 
 	/**
-	 * Checks change after moving in all directions and if none invoke game over
+	 * Checks if movement possible, if not invoke game over
 	 */
 	private void gameOver() {
 		for (Direction direction : Direction.values()) {
@@ -153,7 +153,7 @@ public class AppController {
 	}
 
 	/**
-	 * Resets buttons for very direction
+	 * Resets buttons in every direction
 	 */
 	private void resetButtons() {
 		for (Direction direction : Direction.values()) {
